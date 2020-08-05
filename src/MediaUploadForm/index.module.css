@@ -1,0 +1,50 @@
+.container {
+  display: flex;
+  flex: 1;
+  padding: 8px;
+  margin: 8px;
+  border: 1px solid;
+  border-radius: 4px;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.title {
+  margin: 8px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.upload-button {
+  position: relative;
+  background: linear-gradient(225deg,#00dcc0,#005af0 75%);
+  height: 48px;
+  color: #fff;
+  border: none;
+  border-radius: 48px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  z-index: 1;
+}
+
+/**
+ * Hacky way to get background-color with gradient transition
+ */
+.upload-button::before {
+  border-radius: 48px;
+  background: linear-gradient(225deg,#00dcc0,#005af0 40%);
+  position: absolute;
+  content: "";
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity .3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.upload-button:hover::before {
+  opacity: 1;
+}
