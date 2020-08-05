@@ -15,3 +15,20 @@ export const Default = () => (
     />
   </div>
 );
+
+export const TwoMediaForm = () => (
+  <>
+    <div style={{ display: 'inline-block', width: '600px' }}>
+      <MediaUploadForm
+        onUpload={file => console.log('upload button clicked!', { file })}
+        onPreviewLoad={() => console.log('image preview loaded!')}
+      />
+    </div>
+    <div style={{ display: 'inline-block', width: '600px' }}>
+      <MediaUploadForm
+        onUpload={file => console.log('upload button #2 clicked!', { file })}
+        onPreviewLoad={() => console.log('image preview #2 loaded!')}
+      />
+    </div>
+  </>
+);
