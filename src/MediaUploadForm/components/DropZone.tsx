@@ -15,15 +15,15 @@ interface Props {
   onMediaLoad?: () => any;
 }
 
-export const DropZone: FC<Props> = ({
-  onMediaLoad = noop,
-}) => {
+export const DropZone: FC<Props> = ({ onMediaLoad = noop }) => {
   const [state, setState] = React.useState<'idle' | 'hovered' | 'invalid'>(
     'idle'
   );
-  const { currentFile, setFile } = React.useContext(MediaFormContext)
+  const { currentFile, setFile, compressionRate } = React.useContext(
+    MediaFormContext
+  );
   const [dataUrl, setDataUrl] = React.useState<string>('');
-  const fileInputRef = React.useRef<HTMLInputElement>(null)
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const dragOver = (e: React.DragEvent) => {
     // we need to prevent default here to prevent default browser behavior that might open
@@ -64,7 +64,7 @@ export const DropZone: FC<Props> = ({
 
       reader.readAsDataURL(file);
     }
-  }
+  };
 
   const handleFileDrop = (e: React.DragEvent) => {
     e.preventDefault();
@@ -77,7 +77,7 @@ export const DropZone: FC<Props> = ({
       // this could take quite a bit of time.
       // in that case, we can set it to another state like 'processing' instead of 'idle' here
       setState('idle');
-      
+
       // for now just assume we only have 1 file
       handleUpdateFile(files[0]);
     }
@@ -89,23 +89,23 @@ export const DropZone: FC<Props> = ({
     if (file) {
       handleUpdateFile(file);
     }
-  }
+  };
 
   const handleDropZoneClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
-  }
+  };
 
   return (
     <>
-      <input 
-        className={styles['file-input']} 
-        type="file" 
-        ref={fileInputRef} 
+      <input
+        className={styles['file-input']}
+        type="file"
+        ref={fileInputRef}
         onChange={handleInputChange}
         accept={validFilesExts}
-      /> 
+      />
       <div
         className={cx({
           [styles['dropzone']]: true,
@@ -122,7 +122,11 @@ export const DropZone: FC<Props> = ({
         >
           {dataUrl ? (
             <>
-              <img src={dataUrl} />
+              <img
+                src={dataUrl}
+                // just for demo purposes, make the image blurred to show effect of compression
+                style={{ filter: `blur(${(100 - compressionRate) / 20}px)` }}
+              />
               {currentFile ? `${currentFile.size} bytes` : null}
             </>
           ) : (

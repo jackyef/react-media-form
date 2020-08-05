@@ -26,8 +26,8 @@
 }
 
 .dropzone-content img {
-  width: 100%;
-  height: auto;
+  width: auto;
+  height: 240px;
   object-fit: contain;
 }
 
