@@ -137,6 +137,7 @@ export const DropZone: FC<Props> = ({ onPreviewLoad = noop }) => {
                 src={dataUrl}
                 // just for demo purposes, make the image blurred to show effect of compression
                 style={{ filter: `blur(${(100 - compressionRate) / 20}px)` }}
+                alt="preview"
               />
               {currentFile ? `${currentFile.size} bytes` : null}
             </>

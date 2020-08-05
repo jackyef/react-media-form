@@ -1,4 +1,4 @@
-import React, { FC, HTMLAttributes, BlockquoteHTMLAttributes } from 'react';
+import React, { FC, HTMLAttributes } from 'react';
 
 import styles from './index.module.css';
 import { DropZone } from './components/DropZone';

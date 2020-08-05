@@ -14,11 +14,11 @@
     "start": "tsdx watch",
     "build": "tsdx build",
     "test": "tsdx test --passWithNoTests",
-    "lint": "tsdx lint",
+    "lint": "tsdx lint src",
     "prepare": "tsdx build",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "chromatic": "yarn chromatic --project-token ib02xztj3p"
+    "chromatic-publish": "yarn chromatic --project-token ib02xztj3p"
   },
   "peerDependencies": {
     "react": ">=16"
