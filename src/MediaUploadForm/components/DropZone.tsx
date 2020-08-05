@@ -12,10 +12,10 @@ const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
 const validFilesExts = validTypes.join(',');
 
 interface Props {
-  onMediaLoad?: () => any;
+  onPreviewLoad?: () => any;
 }
 
-export const DropZone: FC<Props> = ({ onMediaLoad = noop }) => {
+export const DropZone: FC<Props> = ({ onPreviewLoad = noop }) => {
   const [state, setState] = React.useState<'idle' | 'hovered' | 'invalid'>(
     'idle'
   );
@@ -59,7 +59,7 @@ export const DropZone: FC<Props> = ({ onMediaLoad = noop }) => {
         setFile(file);
         setDataUrl(reader.result as string);
 
-        onMediaLoad();
+        onPreviewLoad();
       };
 
       reader.readAsDataURL(file);

@@ -8,7 +8,10 @@ export default {
 };
 
 export const Default = () => (
-  <MediaUploadForm
-    onUpload={file => console.log('upload button clicked!', { file })}
-  />
+  <div style={{ maxWidth: '600px' }}>
+    <MediaUploadForm
+      onUpload={file => console.log('upload button clicked!', { file })}
+      onPreviewLoad={() => console.log('image preview loaded!')}
+    />
+  </div>
 );

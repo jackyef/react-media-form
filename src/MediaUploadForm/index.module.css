@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex: 1;
-  padding: 8px;
+  padding: 16px;
   margin: 8px;
   border: 1px solid;
   border-radius: 4px;
@@ -41,6 +41,7 @@
   font-size: 1.125rem;
   font-weight: 600;
   z-index: 1;
+  transition: .3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
 /**
@@ -60,6 +61,10 @@
   transition: opacity .3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
-.upload-button:hover::before {
+.upload-button:hover:enabled::before {
   opacity: 1;
+}
+
+.upload-button:disabled {
+  filter: grayscale(100%);
 }
