@@ -56,10 +56,13 @@ export const MediaUploadForm: FC<Props> = ({
       if (uploadProgress < 100) {
         timeout = setTimeout(() => {
           setUploadProgress(prev => prev + 20);
-        }, 1000)
+        }, 1000);
       } else {
-        setIsUploading(false);
-        setUploadProgress(0);
+        timeout = setTimeout(() => {
+          setIsUploading(false);
+          setUploadProgress(0);
+          setFile(undefined); // clear the selected file
+        }, 1000);
       }
     }
 
@@ -67,23 +70,44 @@ export const MediaUploadForm: FC<Props> = ({
       if (timeout) {
         clearTimeout(timeout);
       }
-    }
+    };
   }, [isUploading, uploadProgress]);
 
-
-  const handleCompressionRateChange = (e: React.FormEvent<HTMLInputElement>) => {
+  const handleCompressionRateChange = (
+    e: React.FormEvent<HTMLInputElement>
+  ) => {
     if (e.target) {
       setCompressionRate(Number((e.target as HTMLInputElement).value));
+    }
+  };
+
+  let buttonText = 'Upload';
+
+  if (isUploading) {
+    if (uploadProgress >= 100) {
+      buttonText = 'Done!';
+    } else {
+      buttonText = 'Uploading...';
     }
   }
 
   return (
-    <MediaFormContext.Provider value={{ currentFile, setFile, compressionRate, uploadProgress, isUploading }}>
+    <MediaFormContext.Provider
+      value={{
+        currentFile,
+        setFile,
+        compressionRate,
+        uploadProgress,
+        isUploading,
+      }}
+    >
       <div className={styles['container']}>
         <p className={styles['title']}>{title}</p>
         <DropZone onPreviewLoad={onPreviewLoad} />
         <div className={styles['slider-container']}>
-          <label htmlFor="compression-rate">Compression rate ({compressionRate}) </label>
+          <label htmlFor="compression-rate">
+            Compression rate ({compressionRate}){' '}
+          </label>
           <input
             type="range"
             min="1"
@@ -92,10 +116,15 @@ export const MediaUploadForm: FC<Props> = ({
             onChange={handleCompressionRateChange}
             className={styles['slider']}
             id="compression-rate"
+            disabled={isUploading}
           />
         </div>
-        <button disabled={!currentFile || isUploading} onClick={handleUpload} className={styles['upload-button']}>
-          Upload
+        <button
+          disabled={!currentFile || isUploading}
+          onClick={handleUpload}
+          className={styles['upload-button']}
+        >
+          {buttonText}
         </button>
       </div>
     </MediaFormContext.Provider>

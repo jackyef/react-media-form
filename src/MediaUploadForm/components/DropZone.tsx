@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import cx from 'classnames';
 
+import { ProgressBar } from './ProgressBar';
 import { MediaFormContext } from '../index';
 
 import { noop } from '../../utils/noop';
@@ -19,11 +20,21 @@ export const DropZone: FC<Props> = ({ onPreviewLoad = noop }) => {
   const [state, setState] = React.useState<'idle' | 'hovered' | 'invalid'>(
     'idle'
   );
-  const { currentFile, setFile, compressionRate } = React.useContext(
-    MediaFormContext
-  );
+  const {
+    currentFile,
+    setFile,
+    compressionRate,
+    isUploading,
+    uploadProgress,
+  } = React.useContext(MediaFormContext);
   const [dataUrl, setDataUrl] = React.useState<string>('');
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  React.useEffect(() => {
+    if (!currentFile && dataUrl) {
+      setDataUrl(''); // reset the preview
+    }
+  }, [currentFile, dataUrl]);
 
   const dragOver = (e: React.DragEvent) => {
     // we need to prevent default here to prevent default browser behavior that might open
@@ -134,6 +145,7 @@ export const DropZone: FC<Props> = ({ onPreviewLoad = noop }) => {
           )}
         </div>
       </div>
+      {isUploading ? <ProgressBar progress={uploadProgress} /> : null}
     </>
   );
 };
