@@ -1,16 +1,27 @@
 import React, { FC } from 'react';
 import cx from 'classnames';
+
+import { MediaFormContext } from '../index';
+
+import { noop } from '../../utils/noop';
+
 import styles from './DropZone.module.css';
 
+// we can set this to be passed down as props if needed. For now, we hardcode this to image types
+const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+const validFilesExts = validTypes.join(',');
+
 interface Props {
-  onDrop: React.DragEventHandler;
+  onMediaLoad?: () => any;
 }
 
-export const DropZone: FC<Props> = () => {
+export const DropZone: FC<Props> = ({
+  onMediaLoad = noop,
+}) => {
   const [state, setState] = React.useState<'idle' | 'hovered' | 'invalid'>(
     'idle'
   );
-  const [currentFile, setFile] = React.useState<File | null>(null);
+  const { currentFile, setFile } = React.useContext(MediaFormContext)
   const [dataUrl, setDataUrl] = React.useState<string>('');
   const fileInputRef = React.useRef<HTMLInputElement>(null)
 
@@ -31,7 +42,6 @@ export const DropZone: FC<Props> = () => {
   };
 
   const validateFile = (file: File) => {
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
     if (validTypes.indexOf(file.type) === -1) {
       return false;
     }
@@ -48,6 +58,8 @@ export const DropZone: FC<Props> = () => {
       reader.onload = () => {
         setFile(file);
         setDataUrl(reader.result as string);
+
+        onMediaLoad();
       };
 
       reader.readAsDataURL(file);
@@ -61,6 +73,9 @@ export const DropZone: FC<Props> = () => {
     if (files.length < 1) {
       setState('invalid');
     } else {
+      // in real world case, with compressions and other stuffs (which we might move to web worker)
+      // this could take quite a bit of time.
+      // in that case, we can set it to another state like 'processing' instead of 'idle' here
       setState('idle');
       
       // for now just assume we only have 1 file
@@ -84,7 +99,13 @@ export const DropZone: FC<Props> = () => {
 
   return (
     <>
-      <input className={styles['file-input']} type="file" ref={fileInputRef} onChange={handleInputChange} /> 
+      <input 
+        className={styles['file-input']} 
+        type="file" 
+        ref={fileInputRef} 
+        onChange={handleInputChange}
+        accept={validFilesExts}
+      /> 
       <div
         className={cx({
           [styles['dropzone']]: true,

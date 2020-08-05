@@ -16,6 +16,21 @@
   text-align: center;
 }
 
+.slider-container {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  margin: 16px;
+}
+
+.slider-container label {
+  width: 20ch;
+}
+
+.slider {
+  flex: 1;
+}
+
 .upload-button {
   position: relative;
   background: linear-gradient(225deg,#00dcc0,#005af0 75%);
